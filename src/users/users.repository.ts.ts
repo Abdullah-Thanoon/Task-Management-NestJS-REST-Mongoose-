@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -8,14 +7,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { UserRole } from './enums/user-role.enum';
 
 @Injectable()
 export class UsersRepository {
   constructor(
     @InjectModel(User.name)
-    private userModel: Model<User>,
+    private readonly userModel: Model<User>,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {

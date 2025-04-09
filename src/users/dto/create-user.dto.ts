@@ -1,5 +1,12 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { UserRole } from '../enums/user-role.enum';
+import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 
 export class CreateUserDto {
   @IsString()
@@ -17,4 +24,8 @@ export class CreateUserDto {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
+
+  @IsOptional()
+  @IsMongoId({ each: true })
+  tasks?: CreateTaskDto[];
 }
