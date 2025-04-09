@@ -25,6 +25,10 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOneByEmail(email);
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) {

@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { UserRole } from './enums/user-role.enum';
+import { hashPassword } from '../common/utils/bcrypt.util';
 
 @Injectable()
 export class UsersRepository {
@@ -18,8 +19,10 @@ export class UsersRepository {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const hashedPass = await hashPassword(createUserDto.password);
       const user = new this.userModel({
         ...createUserDto,
+        password: hashedPass,
         role: createUserDto.role || UserRole.USER, // Set default role if not provided
       });
 
@@ -56,6 +59,24 @@ export class UsersRepository {
       }
       throw new InternalServerErrorException(
         'Error fetching user. Please try again later.',
+        error.message,
+      );
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      const user = await this.userModel.findOne({ email: email });
+      if (!user) {
+        throw new NotFoundException(`User with email ${email} not found.`);
+      }
+      return user;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Error fetching user by email. Please try again later.',
         error.message,
       );
     }
