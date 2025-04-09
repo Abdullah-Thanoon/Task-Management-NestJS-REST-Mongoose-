@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
 import mongoose from 'mongoose';
-import { UsersRepository } from './users.repository.ts';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {

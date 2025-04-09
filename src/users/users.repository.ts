@@ -34,7 +34,7 @@ export class UsersRepository {
 
   async findAll(): Promise<User[]> {
     try {
-      return this.userModel.find();
+      return this.userModel.find().populate('tasks');
     } catch (error) {
       throw new InternalServerErrorException(
         'Error fetching users. Please try again later.',
